@@ -357,3 +357,8 @@ Unable to add window -- token null is not valid; is your activity running?
 4. **安全沙箱**：隔离不同应用或用户的窗口资源。
 
 通过 `token`，Android 实现了窗口系统的安全性、稳定性和一致性。
+
+
+
+
+# 
