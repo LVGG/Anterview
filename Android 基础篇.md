@@ -361,4 +361,169 @@ Unable to add window -- token null is not valid; is your activity running?
 
 
 
-# 
+# Android 开发中recyclerview 相比listview 的优点
+
+在 Android 开发中，`RecyclerView` 是 `ListView` 的升级版，提供了更灵活、高效和可扩展的列表展示方案。以下是 `RecyclerView` 相比 `ListView` 的主要优点：
+
+### 1. **视图复用机制更高效**
+   - **`ListView`**：通过 `convertView` 和 `ViewHolder` 模式手动实现视图复用，容易遗漏优化。
+   - **`RecyclerView`**：强制要求使用 `ViewHolder` 模式，并内置了更高效的视图回收和复用机制（基于 `Recycler` 类），减少内存抖动。
+
+### 2. **支持多种布局类型**
+   - **`ListView`**：仅支持单一的线性列表（垂直或水平），复杂布局需手动处理。
+   - **`RecyclerView`**：通过 `LayoutManager` 支持多种布局：
+     - `LinearLayoutManager`（线性列表）
+     - `GridLayoutManager`（网格）
+     - `StaggeredGridLayoutManager`（瀑布流）
+     - 自定义 `LayoutManager`（实现复杂布局）。
+
+### 3. **分离关注点，代码更清晰**
+   - **`ListView`**：适配器（`Adapter`）需直接操作 `convertView` 和 `ViewHolder`，逻辑耦合。
+   - **`RecyclerView`**：
+     - 强制拆分 `Adapter`、`ViewHolder` 和 `LayoutManager` 的职责。
+     - 通过 `onCreateViewHolder` 和 `onBindViewHolder` 分离视图创建和数据绑定，代码更易维护。
+
+### 4. **动画支持**
+   - **`ListView`**：无内置动画支持，需手动实现。
+   - **`RecyclerView`**：内置 `ItemAnimator`，支持默认的添加/删除/移动动画，并可自定义动画效果。
+
+### 5. **性能优化**
+   - **`ListView`**：预加载机制简单，可能浪费资源。
+   - **`RecyclerView`**：
+     - 按需加载可见项，减少内存占用。
+     - 支持局部刷新（`notifyItemChanged()` 等），避免整列表刷新。
+
+### 6. **灵活性扩展**
+   - **`ListView`**：功能固定，扩展性差（如分组、拖拽排序等需大量自定义）。
+   - **`RecyclerView`**：
+     - 通过 `ItemDecoration` 自定义分隔线、边距等。
+     - 通过 `ItemTouchHelper` 实现拖拽、滑动删除等交互。
+     - 支持嵌套滚动（与其他可滚动视图配合）。
+
+### 7. **更好的兼容性**
+   - **`ListView`**：部分高级功能（如多类型视图）需复杂适配。
+   - **`RecyclerView`**：设计上更现代化，适配不同屏幕和复杂场景更轻松。
+
+### 8. **向后兼容**
+   - `RecyclerView` 属于 Android Support Library（现为 AndroidX），兼容旧版本 Android 系统（最低 API 7+），而 `ListView` 是原生控件但功能有限。
+
+### 何时选择 `ListView`？
+   - 极简场景（如仅需垂直列表且无复杂需求）。
+   - 维护旧代码时若无需升级。
+
+### 总结
+`RecyclerView` 是 `ListView` 的现代化替代方案，适合大多数列表场景。它的设计更符合现代 Android 开发的模块化、可扩展性要求，尽管学习曲线略高，但长期来看能显著提升开发效率和用户体验。
+
+
+
+
+# Android 开发中常用的数据存储方式有哪些？优缺点？
+### **Android 常用数据存储方式及主要用法**  
+
+#### **1. SharedPreferences**  
+用于存储简单的键值对数据（如用户设置、登录状态）。数据以 XML 文件形式存储在应用私有目录，适合小规模数据。  
+
+#### **2. 文件存储**  
+- **内部存储**：应用私有目录，其他应用无法访问，适合存储敏感数据（如日志、缓存）。  
+- **外部存储**：共享存储空间，需动态申请权限（Android 10+ 受限），适合存储大文件（如图片、音频）。  
+
+#### **3. SQLite（推荐 Room）**  
+适用于结构化数据存储（如用户信息、订单记录），支持 SQL 查询。Room 是 SQLite 的封装，提供更简洁的 API 和更好的兼容性。  
+
+#### **4. ContentProvider**  
+用于跨应用共享数据（如联系人、媒体库），需实现标准化接口，适合对外暴露数据。  
+
+#### **5. 网络存储**  
+数据存储在远程服务器，通过 API 访问，适合需要同步到云端的数据（如用户资料、聊天记录）。  
+
+#### **6. NoSQL 数据库（Realm/ObjectBox）**  
+适用于高性能、非结构化数据存储（如游戏数据、实时数据），比 SQLite 更轻量级，读写更快。  
+
+### **总结**  
+- **简单配置** → `SharedPreferences`  
+- **大文件** → 文件存储（注意分区存储）  
+- **结构化数据** → `Room`（推荐）  
+- **跨应用共享** → `ContentProvider`  
+- **云端数据** → API + 缓存  
+- **高性能需求** → `Realm` / `ObjectBox`
+
+
+
+# 了解https吗，你说它相比于http更安全，是哪方面更安全。
+HTTPS 比 HTTP 更安全主要体现在三方面：
+一是通信加密，采用 SSL/TLS 协议对传输数据进行加密，防止数据在传输过程中被窃听；
+二是身份验证，通过数字证书验证服务器身份，确保客户端访问的是真实合法的服务器而非伪造的钓鱼网站；
+三是数据完整性保护，利用消息认证码等技术确保数据在传输过程中未被修改，若数据被篡改接收方能及时发现。
+
+
+
+# 跨进程通信的方式有哪些，binder相对于其他通信方式的优点在哪里。
+
+### **Android 跨进程通信（IPC）方式及 Binder 的优势**  
+
+#### **1. 跨进程通信方式**  
+Android 提供多种 IPC 方式，适用于不同场景：  
+
+- **Binder**  
+  - 基于 C/S 架构，通过 `Service` 和 `AIDL` 实现高效通信。  
+  - 适用于高性能、频繁调用的场景（如系统服务、四大组件间通信）。  
+
+- **Messenger**  
+  - 基于 `Handler` 和 `Message` 的轻量级 IPC，底层仍依赖 Binder。  
+  - 适用于简单的跨进程消息传递（如后台服务与 UI 交互）。  
+
+- **AIDL（Android Interface Definition Language）**  
+  - 基于 Binder 的高级封装，支持自定义接口和复杂数据类型。  
+  - 适用于需要精细控制通信逻辑的场景（如多线程并发调用）。  
+
+- **ContentProvider**  
+  - 专为数据共享设计，通过 `URI` 访问数据，底层基于 Binder。  
+  - 适用于跨进程数据查询和修改（如联系人、媒体库）。  
+
+- **Socket（TCP/UDP）**  
+  - 基于网络协议，适用于设备间或进程间通信。  
+  - 适用于跨设备或需要灵活网络通信的场景（如局域网文件传输）。  
+
+- **文件共享**  
+  - 通过文件读写共享数据，需处理并发和同步问题。  
+  - 适用于简单数据共享（如配置文件），但效率较低。  
+
+- **BroadcastReceiver**  
+  - 基于系统广播机制，适用于一对多通信。  
+  - 适用于事件通知（如电量变化、网络状态更新），但数据传输有限制。  
+
+#### **2. Binder 相比其他 IPC 的优势**  
+Binder 是 Android 最核心的 IPC 机制，相比其他方式具有以下优势：  
+
+1. **高性能**  
+   - 基于内存映射（mmap），减少数据拷贝次数（仅一次用户空间→内核空间→用户空间）。  
+   - 相比 Socket 或管道，Binder 的传输效率更高。  
+
+2. **安全性强**  
+   - 基于 Linux 内核驱动，支持权限验证（`checkCallingUid`）。  
+   - 每个 Binder 服务有唯一标识（`Binder ID`），防止非法进程访问。  
+
+3. **支持复杂数据类型**  
+   - 可直接传递 `Parcelable` 对象、文件描述符（`ParcelFileDescriptor`）等。  
+   - 相比 `Socket` 或文件共享，无需手动序列化/反序列化。  
+
+4. **面向对象设计**  
+   - 基于接口（AIDL），支持方法调用，更符合面向对象编程习惯。  
+   - 相比 `Messenger` 或广播，能实现更复杂的交互逻辑。  
+
+5. **生命周期管理**  
+   - 支持跨进程引用计数，防止内存泄漏（如 `Binder` 死亡通知）。  
+   - 相比 `Socket` 或文件共享，更易管理连接状态。  
+
+6. **系统级支持**  
+   - Android 系统服务（如 `ActivityManagerService`、`PackageManagerService`）均基于 Binder。  
+   - 相比自定义 Socket 或管道，更稳定可靠。  
+
+### **总结**  
+- **Binder 是 Android 首选 IPC 方式**，适用于高性能、安全、复杂的跨进程通信（如四大组件交互）。  
+- **Messenger 适合轻量级消息传递**（如后台服务通知 UI）。  
+- **AIDL 适合需要精细控制的复杂通信**（如多线程并发调用）。  
+- **ContentProvider 适合数据共享**（如数据库查询）。  
+- **Socket/文件共享/广播适用于特定场景**，但效率或安全性较低。
+
+
